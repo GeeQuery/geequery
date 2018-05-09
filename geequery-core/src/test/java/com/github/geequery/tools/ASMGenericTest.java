@@ -1,0 +1,36 @@
+package com.github.geequery.tools;
+
+import java.io.IOException;
+import java.util.Map;
+
+import org.junit.Test;
+
+import com.github.geequery.accelerator.asm.ClassReader;
+import com.github.geequery.accelerator.asm.ClassVisitor;
+import com.github.geequery.accelerator.asm.FieldVisitor;
+import com.github.geequery.accelerator.asm.Opcodes;
+
+public class ASMGenericTest {
+	private Map<String,String>[] field1;
+	
+	@Test
+	public void test1() throws IOException{
+		ClassReader cl=new ClassReader("com.github.geequery.tools.ASMGenericTest");
+		System.out.println(cl.getClassName());
+		cl.accept(new ClassVisitor(Opcodes.ASM5) {
+			@Override
+			public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+				System.out.println(name);
+				System.out.println(desc);
+				System.out.println(signature);
+				return super.visitField(access, name, desc, signature, value);
+			}
+			
+			
+			
+		}, ClassReader.SKIP_CODE);
+		
+		
+	}
+	
+}
