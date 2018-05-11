@@ -1,0 +1,5 @@
+# AutoConfigureGeeQuery auto-configuration imports
+# org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration,\
+com.github.geequery.springboot.test.autoconfigure.AutoConfigureGeeQuery=\
+org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,\
+com.github.geequery.spring.boot.autoconfigure.GeeQueryAutoConfiguration

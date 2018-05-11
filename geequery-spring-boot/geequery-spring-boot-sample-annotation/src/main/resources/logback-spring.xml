@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<configuration>  
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!-- 自定义的日志修正配置 -->  
+    <!-- 
+    <logger name="com.xiaofangtech.sunt.controller" level="WARN" additivity="false">  
+        <appender-ref ref="CONSOLE"/>  
+        <appender-ref ref="FILE"/>  
+    </logger>  
+    <logger name="com.xiaofangtech.sunt.helper" level="WARN" additivity="false">  
+        <appender-ref ref="CONSOLE"/>  
+        <appender-ref ref="FILE"/>  
+    </logger>
+     -->  
+ </configuration>  

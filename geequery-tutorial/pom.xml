@@ -4,12 +4,11 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.geequery</groupId>
-	<artifactId>orm-tutorial</artifactId>
+	<artifactId>geequery-tutorial</artifactId>
 	<version>2.0.0-SNAPSHOT</version>
-	<name>orm-tutorial</name>
-	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<querydsl.version>4.2.1</querydsl.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -105,8 +104,29 @@
 			<artifactId>jta</artifactId>
 			<version>1.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+			<version>${querydsl.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-sql</artifactId>
+			<version>${querydsl.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>joda-time</artifactId>
+					<groupId>joda-time</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-sql-codegen</artifactId>
+			<version>${querydsl.version}</version>
+		</dependency>
 	</dependencies>
-	<description>EF-ORM教程</description>
+	<description>GeeQuery教程</description>
 
 	<build>
 		<plugins>
@@ -120,17 +140,33 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			<!-- <plugin> <groupId>com.github.geequery</groupId> <artifactId>geequery-maven-plugin</artifactId> 
+				<version>${project.version}</version> <executions> <execution> <goals> <goal>enhance</goal> 
+				</goals> </execution> </executions> </plugin> -->
 			<plugin>
-				<groupId>com.github.geequery</groupId>
-				<artifactId>jef-maven-plugin</artifactId>
-				<version>${project.version}</version>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>1.1.3</version>
+				<configuration>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
-							<goal>enhance</goal>
+							<goal>process</goal>
 						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources</outputDirectory>
+							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.querydsl</groupId>
+						<artifactId>querydsl-apt</artifactId>
+						<version>${querydsl.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -143,34 +179,14 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>com.github.geequery</groupId>
-										<artifactId>jef-maven-plugin</artifactId>
-										<versionRange>[1.0,)</versionRange>
-										<goals>
-											<goal>enhance</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+		<!-- <pluginManagement> <plugins> <plugin> <groupId>org.eclipse.m2e</groupId> 
+			<artifactId>lifecycle-mapping</artifactId> <version>1.0.0</version> <configuration> 
+			<lifecycleMappingMetadata> <pluginExecutions> <pluginExecution> <pluginExecutionFilter> 
+			<groupId>com.github.geequery</groupId> <artifactId>jef-maven-plugin</artifactId> 
+			<versionRange>[1.0,)</versionRange> <goals> <goal>enhance</goal> </goals> 
+			</pluginExecutionFilter> <action> <ignore /> </action> </pluginExecution> 
+			</pluginExecutions> </lifecycleMappingMetadata> </configuration> </plugin> 
+			</plugins> </pluginManagement> -->
 	</build>
 	<distributionManagement>
 		<repository>
