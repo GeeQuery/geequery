@@ -1,6 +1,6 @@
 package com.github.geequery.dialect;
 
-import jef.database.support.RDBMS;
+import com.github.geequery.core.support.RDBMS;
 
 public class MariaDbDialect extends MySqlDialect{
 	@Override

@@ -9,12 +9,12 @@ import jef.database.Field;
 import com.github.geequery.dialect.ColumnType;
 import com.github.geequery.dialect.DatabaseDialect;
 import jef.database.jdbc.result.IResultSet;
-import jef.database.meta.ITableMetadata;
+import jef.database.meta.EntityMetadata;
 import jef.tools.reflect.Property;
 
 public final class AutoIntMapping extends AutoIncrementMapping {
 	@Override
-	public void init(Field field, String columnName, ColumnType type, ITableMetadata meta) {
+	public void init(Field field, String columnName, ColumnType type, EntityMetadata meta) {
 		super.init(field, columnName, type, meta);
 		accessor = new J2IProperty(super.fieldAccessor);
 	}

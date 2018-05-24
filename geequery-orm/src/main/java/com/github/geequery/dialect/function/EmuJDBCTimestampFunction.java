@@ -2,7 +2,11 @@ package com.github.geequery.dialect.function;
 
 import java.util.List;
 
+import jef.database.query.Func;
+import jef.database.query.SqlExpression;
+
 import com.github.geequery.dialect.DatabaseDialect;
+import com.github.geequery.dialect.SqliteDialect;
 import com.github.geequery.jsqlparser.expression.Function;
 import com.github.geequery.jsqlparser.expression.StringValue;
 import com.github.geequery.jsqlparser.visitor.Expression;
@@ -17,6 +21,12 @@ public class EmuJDBCTimestampFunction extends BaseArgumentSqlFunction{
 		this.parent=parent;
 	}
 	
+	
+	//FIXME To be deleted
+	public EmuJDBCTimestampFunction(Func name, SqliteDialect parent) {
+		this(name,(DatabaseDialect)parent);
+	}
+
 	public String getName() {
 		return func.name();
 	}
@@ -37,7 +47,7 @@ public class EmuJDBCTimestampFunction extends BaseArgumentSqlFunction{
 		if(tsi==null){
 			throw new IllegalArgumentException("Can not parse the argument: "+arguments.get(0)+" to a valid SQL_TSI value.");
 		}
-		arguments.set(0, tsi.get());
+		arguments.set(0, new SqlExpression(tsi.get()));
 		if(this.func==Func.timestampadd){
 			checkArg(arguments,2);
 		}else if(this.func==Func.timestampdiff){
@@ -51,7 +61,7 @@ public class EmuJDBCTimestampFunction extends BaseArgumentSqlFunction{
 	private void checkArg(List<Expression> arguments, int i) {
 		Expression ex=arguments.get(i);
 		if(ex instanceof StringValue){
-			FunctionMapping mapping=parent.getFunctions().get("timestamp");
+			FunctionDialect mapping=parent.getFunctions().get("timestamp");
 			if(mapping!=null){
 				ex=mapping.rewrite("timestamp", ex);
 				arguments.set(i, ex);

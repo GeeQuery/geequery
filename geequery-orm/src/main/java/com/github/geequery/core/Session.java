@@ -8,6 +8,7 @@ import javax.persistence.NonUniqueResultException;
 
 import com.github.geequery.core.cache.Cache;
 import com.github.geequery.dialect.DatabaseDialect;
+import com.github.geequery.entity.IQueryableEntity;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.BeanPath;
@@ -28,11 +29,17 @@ public interface Session extends JPQLQueryFactory{
 	 * @return 指定数据源的方言
 	 */
 	DatabaseDialect getProfile(String datasourceName);
+	
+	/**
+	 * Get the session factory
+	 * @return
+	 */
+	SessionFactory getParent();
 
 	/**
 	 * 关闭数据库事务。<br>
 	 * <ul>
-	 * <li>在DbClient上调用此方法，无任何影响。</li>
+	 * <li>在SessionFactory上调用此方法，无任何影响。</li>
 	 * <li>在Transaction上调用此方法，将会关闭事务，未被提交的修改将会回滚。</li>
 	 * </ul>
 	 */
@@ -119,7 +126,7 @@ public interface Session extends JPQLQueryFactory{
 	 * @return 查询对象(NativeQuery)
 	 * @see NativeQuery
 	 */
-	// <T> NativeQuery<T> createNamedQuery(String name, ITableMetadata
+	// <T> NativeQuery<T> createNamedQuery(String name, EntityMetadata
 	// resultMeta);
 
 	/**

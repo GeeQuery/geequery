@@ -7,12 +7,14 @@ import java.util.UUID;
 import jef.accelerator.bean.BeanAccessor;
 import jef.accelerator.bean.FastBeanWrapperImpl;
 import jef.database.Field;
-import jef.database.IQueryableEntity;
 import jef.database.ORMConfig;
+
 import com.github.geequery.dialect.ColumnType;
 import com.github.geequery.dialect.ColumnType.GUID;
+import com.github.geequery.entity.IQueryableEntity;
+
 import jef.database.meta.EntityType;
-import jef.database.meta.ITableMetadata;
+import jef.database.meta.EntityMetadata;
 import jef.database.wrapper.clause.InsertSqlClause;
 import jef.database.wrapper.processor.InsertStep.GUIDGenerateCallback;
 import jef.database.wrapper.processor.InsertStep.SingleKeySetCallback;
@@ -26,7 +28,7 @@ public class AutoGuidMapping extends VarcharStringMapping {
 	private Property accessor;
 
 	@Override
-	public void init(Field field, String columnName, ColumnType type, ITableMetadata meta) {
+	public void init(Field field, String columnName, ColumnType type, EntityMetadata meta) {
 		super.init(field, columnName, type, meta);
 		GUID cType = (GUID) type;
 		removeDash = cType.isRemoveDash();

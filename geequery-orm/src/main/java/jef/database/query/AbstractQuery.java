@@ -1,0 +1,126 @@
+package jef.database.query;
+
+import java.io.Serializable;
+
+import javax.persistence.Transient;
+
+import com.github.geequery.core.DbUtils;
+import com.github.geequery.core.SelectProcessor;
+import com.github.geequery.dialect.DatabaseDialect;
+import com.github.geequery.entity.IQueryableEntity;
+
+import jef.database.Field;
+import jef.database.meta.ITableMetadata;
+import jef.database.meta.MetaHolder;
+import jef.database.routing.PartitionResult;
+import jef.database.wrapper.clause.BindSql;
+import jef.database.wrapper.clause.GroupClause;
+import jef.database.wrapper.clause.QueryClause;
+import jef.database.wrapper.clause.QueryClauseImpl;
+
+@SuppressWarnings("serial")
+public abstract class AbstractQuery<T extends IQueryableEntity> implements Query<T>, Serializable {
+
+	static final Query<?>[] EMPTY_Q = new Query[0];
+
+	/**
+	 * 实例
+	 */
+	@Transient
+	transient T instance;
+	/**
+	 * 类型
+	 */
+	@Transient
+	transient ITableMetadata type;
+
+	private int maxResult;
+	private int fetchSize;
+	private int queryTimeout;
+	protected boolean cacheable = true;
+
+	public void setMaxResult(int size) {
+		this.maxResult = size;
+	}
+
+	public void setFetchSize(int fetchszie) {
+		this.fetchSize = fetchszie;
+	}
+
+	public void setQueryTimeout(int timeout) {
+		this.queryTimeout = timeout;
+	}
+
+	public int getMaxResult() {
+		return maxResult;
+	}
+
+	public int getFetchSize() {
+		return fetchSize;
+	}
+
+	public int getQueryTimeout() {
+		return queryTimeout;
+	}
+
+	public Query<T> orderByAsc(Field... ascFields) {
+		addOrderBy(true, ascFields);
+		return this;
+	}
+
+	public Query<T> orderByDesc(Field... descFields) {
+		addOrderBy(false, descFields);
+		return this;
+	}
+
+	public ITableMetadata getMeta() {
+		return type;
+	}
+
+	public T getInstance() {
+		return instance;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Class<T> getType() {
+		return (Class<T>) type.getThisType();
+	}
+
+	@Override
+	public QueryClause toQuerySql(SelectProcessor processor, SqlContext context, boolean order) {
+		String tableName = (String) getAttribute(JoinElement.CUSTOM_TABLE_NAME);
+		if (tableName != null)
+			tableName = MetaHolder.toSchemaAdjustedName(tableName);
+		PartitionResult[] prs = DbUtils.toTableNames(getInstance(), tableName, this);
+		DatabaseDialect profile = processor.getProfile(prs);
+
+		GroupClause groupClause = SelectProcessor.toGroupAndHavingClause(this, context, profile);
+		BindSql whereResult = processor.parent.toWhereClause(this, context, null, profile, false);
+
+		QueryClauseImpl result = new QueryClauseImpl(profile);
+		result.setGrouphavingPart(groupClause);
+
+		result.setSelectPart(SelectProcessor.toSelectSql(context, groupClause, profile));
+		result.setGrouphavingPart(groupClause);
+		result.setTables(type.getTableName(false), prs);
+		result.setWherePart(whereResult.getSql());
+		result.setBind(whereResult.getBind());
+		if (order)
+			result.setOrderbyPart(SelectProcessor.toOrderClause(this, context, profile));
+		return result;
+	}
+
+	@Override
+	public Terms terms() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setCacheable(boolean cacheable) {
+		this.cacheable = cacheable;
+	}
+
+	public boolean isCacheable() {
+		return cacheable;
+	}
+}

@@ -74,7 +74,7 @@ import com.github.geequery.dialect.function.StandardSQLFunction;
 import com.github.geequery.dialect.function.TemplateFunction;
 import com.github.geequery.dialect.function.TransformFunction;
 import com.github.geequery.dialect.function.VarArgsSQLFunction;
-import jef.database.support.RDBMS;
+import com.github.geequery.core.support.RDBMS;
 import jef.database.wrapper.clause.InsertSqlClause;
 import jef.database.wrapper.populator.AbstractResultSetTransformer;
 import jef.jre5support.ProcessUtil;

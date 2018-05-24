@@ -1,8 +1,7 @@
 package com.github.geequery.dialect.type;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import jef.database.jdbc.result.IResultSet;
 
 /**
  * ResultSet访问者 用于描述某个字段的值从结果集中的获取办法
@@ -18,7 +17,7 @@ public interface ResultSetAccessor {
 	 * @return 合适的值。可能取到null
 	 * @throws SQLException
 	 */
-	Object jdbcGet(IResultSet rs, int n) throws SQLException;
+	Object jdbcGet(ResultSet rs, int n) throws SQLException;
 
 	/**
 	 * 用于检查当前的结果集访问器获得的数据类型是否能适应指定的Type 

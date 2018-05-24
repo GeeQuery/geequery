@@ -37,42 +37,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.PersistenceException;
 import javax.sql.rowset.CachedRowSet;
 
-import jef.common.log.LogUtil;
-import jef.database.DbCfg;
-import jef.database.DbFunction;
-import jef.database.DbMetaData;
-import jef.database.DbMetaData.ObjectType;
-import jef.database.datasource.DataSourceInfo;
-import com.github.geequery.dialect.ColumnType.Varchar;
-import com.github.geequery.dialect.type.AColumnMapping;
-import com.github.geequery.dialect.type.AutoIncrementMapping;
-import com.github.geequery.dialect.type.ParserFactory;
-import jef.database.exception.ViolatedConstraintNameExtracter;
 import jef.database.jdbc.JDBCTarget;
-import jef.database.jsqlparser.expression.BinaryExpression;
-import jef.database.jsqlparser.expression.Function;
-import jef.database.jsqlparser.expression.Interval;
-import jef.database.jsqlparser.visitor.Expression;
 import jef.database.meta.DbProperty;
 import jef.database.meta.Feature;
 import jef.database.meta.FunctionMapping;
-import jef.database.meta.object.Case;
-import jef.database.meta.object.Constraint;
-import jef.database.meta.object.SequenceInfo;
-import jef.database.meta.object.TableInfo;
 import jef.database.query.Func;
 import jef.database.query.Scientific;
 import jef.database.query.SqlExpression;
+import jef.database.wrapper.clause.InsertSqlClause;
+
+import com.github.geequery.DbMetaData;
+import com.github.geequery.dbmeta.Case;
+import com.github.geequery.dbmeta.Column;
+import com.github.geequery.dbmeta.Constraint;
+import com.github.geequery.dbmeta.Function;
+import com.github.geequery.dbmeta.ObjectType;
+import com.github.geequery.dbmeta.SequenceInfo;
+import com.github.geequery.dbmeta.TableInfo;
+import com.github.geequery.dialect.ColumnType.Varchar;
+import com.github.geequery.dialect.extension.ViolatedConstraintNameExtracter;
+import com.github.geequery.dialect.function.DbFunction;
+import com.github.geequery.dialect.function.FunctionDialect;
 import com.github.geequery.dialect.function.SQLFunction;
 import com.github.geequery.dialect.function.StandardSQLFunction;
-import jef.database.wrapper.clause.InsertSqlClause;
-import jef.tools.ArrayUtils;
-import jef.tools.Assert;
-import jef.tools.DateFormats;
-import jef.tools.DateUtils;
-import jef.tools.IOUtils;
-import jef.tools.JefConfiguration;
-import jef.tools.StringUtils;
+import com.github.geequery.dialect.type.AColumnMapping;
+import com.github.geequery.dialect.type.AutoIncrementMapping;
+import com.github.geequery.dialect.type.ParserFactory;
+import com.github.geequery.jsqlparser.expression.BinaryExpression;
+import com.github.geequery.jsqlparser.expression.Interval;
+import com.github.geequery.jsqlparser.visitor.Expression;
+import com.github.geequery.tools.ArrayUtils;
+import com.github.geequery.tools.Assert;
+import com.github.geequery.tools.DateFormats;
+import com.github.geequery.tools.DateUtils;
+import com.github.geequery.tools.IOUtils;
+import com.github.geequery.tools.StringUtils;
 
 /**
  * 数据库方言的抽象类
@@ -86,14 +85,11 @@ public abstract class AbstractDialect implements DatabaseDialect {
 			return null;
 		}
 	};
-	/**
-	 * 所有已经构建的Dialect，缓存
-	 */
-	private static final Map<String, DatabaseDialect> ITEMS = new HashMap<String, DatabaseDialect>();
+
 	/**
 	 * 缺省的函数对象，所有数据库都支持的函数
 	 */
-	private static final List<FunctionMapping> DEFAULT_FUNCTIONS = new ArrayList<FunctionMapping>();
+	private static final List<FunctionDialect> DEFAULT_FUNCTIONS = new ArrayList<FunctionDialect>();
 	/**
 	 * 数据库关键字
 	 */
@@ -105,11 +101,11 @@ public abstract class AbstractDialect implements DatabaseDialect {
 	/**
 	 * 函数索引
 	 */
-	protected Map<String, FunctionMapping> functions = new HashMap<String, FunctionMapping>();
+	protected Map<String, FunctionDialect> functions = new HashMap<String, FunctionDialect>();
 	/**
 	 * 函数索引
 	 */
-	protected Map<DbFunction, FunctionMapping> functionsIndex = new HashMap<DbFunction, FunctionMapping>();
+	protected Map<DbFunction, FunctionDialect> functionsIndex = new HashMap<DbFunction, FunctionDialect>();
 	/**
 	 * 各种文本属性
 	 */
@@ -127,7 +123,7 @@ public abstract class AbstractDialect implements DatabaseDialect {
 
 	// 缺省的函数注册掉
 	public AbstractDialect() {
-		for (FunctionMapping m : DEFAULT_FUNCTIONS) {
+		for (FunctionDialect m : DEFAULT_FUNCTIONS) {
 			this.functions.put(m.getFunction().getName(), m);
 			this.functionsIndex.put(m.getStardard(), m);
 		}
@@ -210,7 +206,7 @@ public abstract class AbstractDialect implements DatabaseDialect {
 		this.functions.put(name, mapping);
 		if (func != null) {
 			@SuppressWarnings("unused")
-			FunctionMapping old = this.functionsIndex.put(func, mapping);
+			FunctionDialect old = this.functionsIndex.put(func, mapping);
 			// 注释掉，可以支持覆盖。调试时可以重新开启
 			// if (old != null && synonyms.length == 0) {
 			// throw new IllegalArgumentException("duplicate reg of " + name +
@@ -245,7 +241,7 @@ public abstract class AbstractDialect implements DatabaseDialect {
 	 *            本地函数名
 	 */
 	protected void registerAlias(DbFunction func, String nativeName) {
-		FunctionMapping fm = functions.get(nativeName);
+		FunctionDialect fm = functions.get(nativeName);
 		if (fm == null) {
 			throw new IllegalArgumentException("Dialect error! the native function " + nativeName + " in " + getName() + " not found!");
 		}
@@ -263,7 +259,7 @@ public abstract class AbstractDialect implements DatabaseDialect {
 	 *            本地函数名
 	 */
 	protected void registerAlias(String func, String nativeName) {
-		FunctionMapping fm = functions.get(nativeName);
+		FunctionDialect fm = functions.get(nativeName);
 		if (fm == null) {
 			throw new IllegalArgumentException("Dialect error! the native function " + nativeName + " in " + getName() + " not found!");
 		}
@@ -287,7 +283,7 @@ public abstract class AbstractDialect implements DatabaseDialect {
 		if (func != null) {
 			String name = func.name();
 			this.functions.put(name, mapping);
-			FunctionMapping old = this.functionsIndex.put(func, mapping);
+			FunctionDialect old = this.functionsIndex.put(func, mapping);
 			if (old != null && old.getMatch() < FunctionMapping.MATCH_EMULATION) {
 				this.functionsIndex.put(func, old);// 再重新挤回去。即以匹配度最高的函数实现为准
 			}
@@ -298,7 +294,7 @@ public abstract class AbstractDialect implements DatabaseDialect {
 	}
 
 	public String getFunction(DbFunction func, Object... params) {
-		FunctionMapping mapping = this.getFunctionsByEnum().get(func);
+		FunctionDialect mapping = this.getFunctionsByEnum().get(func);
 		if (mapping == null) {
 			throw new IllegalArgumentException("Unknown database function " + func.name());
 		}
@@ -323,11 +319,11 @@ public abstract class AbstractDialect implements DatabaseDialect {
 		}
 	}
 
-	public Map<String, FunctionMapping> getFunctions() {
+	public Map<String, FunctionDialect> getFunctions() {
 		return functions;
 	}
 
-	public Map<DbFunction, FunctionMapping> getFunctionsByEnum() {
+	public Map<DbFunction, FunctionDialect> getFunctionsByEnum() {
 		return functionsIndex;
 	}
 
@@ -335,8 +331,6 @@ public abstract class AbstractDialect implements DatabaseDialect {
 		return null;
 	}
 
-	public void processConnectProperties(DataSourceInfo dsw) {
-	}
 
 	public boolean containKeyword(String name) {
 		return keywords.contains(name);
@@ -351,23 +345,23 @@ public abstract class AbstractDialect implements DatabaseDialect {
 		return value == null ? defaultValue : value;
 	}
 
-	@Override
-	public int getPropertyInt(DbProperty key) {
-		String s = properties.get(key);
-		if (StringUtils.isEmpty(s)) {
-			return 0;
-		}
-		return Integer.parseInt(s);
-	}
-
-	@Override
-	public long getPropertyLong(DbProperty key) {
-		String s = properties.get(key);
-		if (StringUtils.isEmpty(s)) {
-			return 0;
-		}
-		return Long.parseLong(s);
-	}
+//	@Override
+//	public int getPropertyInt(DbProperty key) {
+//		String s = properties.get(key);
+//		if (StringUtils.isEmpty(s)) {
+//			return 0;
+//		}
+//		return Integer.parseInt(s);
+//	}
+//
+//	@Override
+//	public long getPropertyLong(DbProperty key) {
+//		String s = properties.get(key);
+//		if (StringUtils.isEmpty(s)) {
+//			return 0;
+//		}
+//		return Long.parseLong(s);
+//	}
 
 	/**
 	 * 产生用于建表的SQL语句
@@ -506,7 +500,7 @@ public abstract class AbstractDialect implements DatabaseDialect {
 	/**
 	 * 将数据库定义的字段类型映射到JEF的字段类型上
 	 */
-	public ColumnType getProprtMetaFromDbType(jef.database.meta.object.Column column) {
+	public ColumnType getProprtMetaFromDbType(Column column) {
 		int type = column.getDataTypeCode();
 		if (type == -9999) {
 			type = judgeTypeCode(column.getDataType());
@@ -645,7 +639,6 @@ public abstract class AbstractDialect implements DatabaseDialect {
 		return caseHandler.getObjectNameToUse(column);
 	}
 
-	@Override
 	public List<SequenceInfo> getSequenceInfo(DbMetaData conn, String schema, String seqName) throws SQLException {
 		List<SequenceInfo> result = new ArrayList<SequenceInfo>(2);
 		for (TableInfo table : conn.getDatabaseObject(ObjectType.SEQUENCE, schema, conn.getProfile().getObjectNameToUse(seqName), null, false)) {
@@ -778,62 +771,10 @@ public abstract class AbstractDialect implements DatabaseDialect {
 		}
 	}
 
-	/**
-	 * 根据RDBMS名称获得数据库方言
-	 * 
-	 * @param dbmsName
-	 * @return
-	 */
-	public static DatabaseDialect getDialect(String dbmsName) {
-		dbmsName = dbmsName.toLowerCase();
-		DatabaseDialect profile = ITEMS.get(dbmsName);
-		if (profile != null)
-			return profile;
-		profile = lookupDialect(dbmsName);
-		return profile;
-	}
 
-	private synchronized static DatabaseDialect lookupDialect(String dbmsName) {
-		Map<String, String> dialectMappings = initDialectMapping();
-		String classname = dialectMappings.remove(dbmsName);
-		if (classname == null) {
-			throw new IllegalArgumentException("the dbms '" + dbmsName + "' is not supported yet");
-		}
-		try {
-			Class<?> c = Class.forName(classname);
-			DatabaseDialect result = (DatabaseDialect) c.newInstance();
-			ITEMS.put(dbmsName, result);
-			return result;
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			LogUtil.exception(e);
-			throw new IllegalArgumentException("the Dialect class can't be created:" + classname);
-		}
-	}
-
-	private static Map<String, String> initDialectMapping() {
-		URL url = AbstractDialect.class.getResource("/META-INF/dialect-mapping.properties");
-		if (url == null) {
-			LogUtil.fatal("Can not found Dialect Mapping File. /META-INF/dialect-mapping.properties");
-		}
-		Map<String, String> config = IOUtils.loadProperties(url);
-		String file = JefConfiguration.get(DbCfg.DB_DIALECT_CONFIG);
-		if (StringUtils.isNotEmpty(file)) {
-			url = AbstractDialect.class.getClassLoader().getResource(file);
-			if (url == null) {
-				LogUtil.warn("The custom dialect mapping file [{}] was not found.", file);
-			} else {
-				Map<String, String> config1 = IOUtils.loadProperties(url);
-				config.putAll(config1);
-			}
-		}
-		return config;
-	}
 
 	static ParserFactory DEFAULT_PARSER = new ParserFactory.Default();
 
-	@Override
 	public ParserFactory getParserFactory() {
 		return DEFAULT_PARSER;
 	}
@@ -848,9 +789,5 @@ public abstract class AbstractDialect implements DatabaseDialect {
 		return caseHandler.isCaseSensitive();
 	}
 
-	@Override
-	public List<Constraint> getConstraintInfo(DbMetaData conn, String schema, String tableName, String constraintName) throws SQLException {
-		return null;
-	}
 
 }

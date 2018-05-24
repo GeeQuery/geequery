@@ -12,17 +12,19 @@ import jef.common.Entry;
 import jef.database.DbMetaData;
 import jef.database.DbUtils;
 import jef.database.Field;
-import jef.database.IQueryableEntity;
 import jef.database.ORMConfig;
 import jef.database.OperateTarget;
 import jef.database.Sequence;
 import jef.database.annotation.PartitionFunction;
 import jef.database.annotation.PartitionKey;
+
 import com.github.geequery.dialect.ColumnType;
 import com.github.geequery.dialect.ColumnType.AutoIncrement;
 import com.github.geequery.dialect.DatabaseDialect;
+import com.github.geequery.entity.IQueryableEntity;
+
 import jef.database.meta.Feature;
-import jef.database.meta.ITableMetadata;
+import jef.database.meta.EntityMetadata;
 import jef.database.meta.MetaHolder;
 import jef.database.meta.object.Column;
 import jef.database.wrapper.clause.InsertSqlClause;
@@ -62,7 +64,7 @@ public abstract class AutoIncrementMapping extends AColumnMapping {
 	}
 
 	@Override
-	public void init(Field field, String columnName, ColumnType type, ITableMetadata meta) {
+	public void init(Field field, String columnName, ColumnType type, EntityMetadata meta) {
 		super.init(field, columnName, type, meta);
 		len = ((AutoIncrement) type).getPrecision();
 		this.isBig = len > 10;

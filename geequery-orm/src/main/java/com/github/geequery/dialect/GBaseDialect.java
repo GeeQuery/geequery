@@ -4,13 +4,13 @@ import java.util.Arrays;
 
 import jef.database.ConnectInfo;
 import jef.database.DbFunction;
-import com.github.geequery.dialect.handler.LimitHandler;
-import com.github.geequery.dialect.handler.LimitOffsetLimitHandler;
 import jef.database.meta.DbProperty;
 import jef.database.meta.Feature;
-import jef.database.support.RDBMS;
-import jef.tools.collection.CollectionUtils;
+import com.github.geequery.core.support.RDBMS;
 
+import com.github.geequery.dialect.handler.LimitHandler;
+import com.github.geequery.dialect.handler.LimitOffsetLimitHandler;
+import com.github.geequery.tools.collection.CollectionUtils;
 import com.querydsl.sql.OracleTemplates;
 import com.querydsl.sql.SQLTemplates;
 

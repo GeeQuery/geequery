@@ -50,7 +50,7 @@ import com.github.geequery.dialect.function.MySQLTruncate;
 import com.github.geequery.dialect.function.NoArgSQLFunction;
 import com.github.geequery.dialect.function.StandardSQLFunction;
 import com.github.geequery.dialect.function.TemplateFunction;
-import jef.database.support.RDBMS;
+import com.github.geequery.core.support.RDBMS;
 import jef.database.wrapper.populator.AbstractResultSetTransformer;
 import jef.tools.ArrayUtils;
 import jef.tools.StringUtils;

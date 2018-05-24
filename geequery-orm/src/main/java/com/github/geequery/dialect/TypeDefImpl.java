@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.github.geequery.dialect.type.ColumnMapping;
 import com.github.geequery.dialect.type.UnknownStringMapping;
-import jef.tools.reflect.BeanUtils;
+import com.github.geequery.tools.reflect.BeanUtils;
 
 
 /**

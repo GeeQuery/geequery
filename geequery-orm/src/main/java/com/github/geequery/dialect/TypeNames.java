@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import jef.tools.StringUtils;
+import com.github.geequery.tools.StringUtils;
 
 /**
  * This class maps a type to names. Associations may be marked with a capacity.

@@ -16,15 +16,11 @@
 package com.github.geequery.springdata.repository.support;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
 import jef.database.jpa.JefEntityManagerFactory;
-import jef.tools.StringUtils;
-import jef.tools.reflect.ClassEx;
-import jef.tools.reflect.FieldEx;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +36,9 @@ import org.springframework.data.repository.core.support.RepositoryFactorySupport
 import org.springframework.data.repository.core.support.TransactionalRepositoryFactoryBeanSupport;
 
 import com.github.geequery.springdata.repository.query.QueryUtils;
+import com.github.geequery.tools.StringUtils;
+import com.github.geequery.tools.reflect.ClassEx;
+import com.github.geequery.tools.reflect.FieldEx;
 
 /**
  * Special adapter for Springs

@@ -14,7 +14,7 @@ import com.github.geequery.dialect.ColumnType;
 import com.github.geequery.dialect.DatabaseDialect;
 import jef.database.jdbc.result.IResultSet;
 import jef.database.jsqlparser.visitor.Expression;
-import jef.database.meta.ITableMetadata;
+import jef.database.meta.EntityMetadata;
 import jef.database.wrapper.populator.ColumnDescription;
 import jef.tools.DateUtils;
 
@@ -28,7 +28,7 @@ public final class ColumnMappings {
 	private ColumnMappings() {
 	}
 
-	public static ColumnMapping getMapping(Field field, ITableMetadata meta, String columnName, ColumnType type, boolean pk) {
+	public static ColumnMapping getMapping(Field field, EntityMetadata meta, String columnName, ColumnType type, boolean pk) {
 		BeanAccessor beanAccessor = meta.getContainerAccessor();
 		Class<?> fieldType = beanAccessor.getPropertyType(field.name());
 		ColumnMapping mType = type.getMappingType(fieldType);

@@ -1,6 +1,6 @@
 package com.github.geequery.dialect;
 
-import jef.tools.StringUtils;
+import com.github.geequery.tools.StringUtils;
 
 public class HsqlDbFileDialect extends HsqlDbMemDialect{
 

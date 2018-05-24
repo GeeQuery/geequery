@@ -11,7 +11,7 @@
 	<name>geequery-spring-boot-sample-annotation</name>
 	<dependencies>
 		<dependency>
-			<groupId>com.github.geequery</groupId>
+			<groupId>com.github.geequery.spring.boot</groupId>
 			<artifactId>geequery-spring-boot-starter</artifactId>
 		</dependency>
 		<!-- Spring的数据源配置需要引入 -->
@@ -26,12 +26,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.geequery</groupId>
+			<groupId>com.github.geequery.spring.boot</groupId>
 			<artifactId>geequery-spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>

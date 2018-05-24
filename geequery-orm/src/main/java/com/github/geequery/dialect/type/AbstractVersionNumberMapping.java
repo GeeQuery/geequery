@@ -5,11 +5,13 @@ import java.util.List;
 
 import jef.accelerator.bean.BeanAccessor;
 import jef.database.Field;
-import jef.database.IQueryableEntity;
 import jef.database.annotation.DateGenerateType;
+
 import com.github.geequery.dialect.ColumnType;
 import com.github.geequery.dialect.DatabaseDialect;
-import jef.database.meta.ITableMetadata;
+import com.github.geequery.entity.IQueryableEntity;
+
+import jef.database.meta.EntityMetadata;
 import jef.database.wrapper.clause.InsertSqlClause;
 import jef.database.wrapper.clause.UpdateClause;
 import jef.database.wrapper.processor.InsertStepAdapter;
@@ -76,7 +78,7 @@ public abstract class AbstractVersionNumberMapping extends AColumnMapping implem
 	};
 
 	@Override
-	public void init(Field field, String columnName, ColumnType type, ITableMetadata meta) {
+	public void init(Field field, String columnName, ColumnType type, EntityMetadata meta) {
 		super.init(field, columnName, type, meta);
 		BeanAccessor ba = meta.getContainerAccessor();
 		accessor = ba.getProperty(field.name());

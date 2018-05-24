@@ -12,7 +12,7 @@
 //
 //import jef.common.log.LogUtil;
 //import jef.database.query.Query;
-//import jef.database.support.RDBMS;
+//import com.github.geequery.core.support.RDBMS;
 //import jef.tools.Assert;
 //import jef.tools.IOUtils;
 //import jef.tools.PageLimit;
@@ -25,12 +25,12 @@
 //import org.xml.sax.SAXException;
 //
 //final class NamedQueryHolder {
-//	private DbClient parent;
+//	private SessionFactory parent;
 //	private Map<String, NQEntry> namedQueries;
 //	private Map<File, Long> loadedFiles = new HashMap<File, Long>();
 //	private long lastUpdate;// 记录上次更新文件的时间
 //
-//	public NamedQueryHolder(DbClient parent) {
+//	public NamedQueryHolder(SessionFactory parent) {
 //		this.parent = parent;
 //		initQueries();
 //		lastUpdate = System.currentTimeMillis();

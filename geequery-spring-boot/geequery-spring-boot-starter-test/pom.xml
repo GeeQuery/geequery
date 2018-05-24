@@ -21,7 +21,7 @@
 			<artifactId>spring-boot-test-autoconfigure</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.geequery</groupId>
+			<groupId>com.github.geequery.spring.boot</groupId>
 			<artifactId>geequery-spring-boot-starter</artifactId>
 		</dependency>
 		<dependency>

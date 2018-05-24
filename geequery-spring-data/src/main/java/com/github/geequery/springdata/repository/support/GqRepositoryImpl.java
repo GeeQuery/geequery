@@ -28,28 +28,13 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
-import jef.database.DbClient;
-import jef.database.DbUtils;
 import jef.database.Field;
-import jef.database.IQueryableEntity;
-import jef.database.NativeQuery;
 import jef.database.PojoWrapper;
-import jef.database.QB;
-import jef.database.RecordHolder;
-import jef.database.Session;
-import jef.database.dialect.type.ColumnMapping;
 import jef.database.jpa.JefEntityManager;
 import jef.database.jpa.JefEntityManagerFactory;
 import jef.database.meta.EntityType;
 import jef.database.meta.ITableMetadata;
-import jef.database.meta.MetaHolder;
-import jef.database.query.ConditionQuery;
-import jef.database.query.PKQuery;
-import jef.database.query.Query;
 import jef.database.query.SqlExpression;
-import jef.tools.ArrayUtils;
-import jef.tools.Assert;
-import jef.tools.PageLimit;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -60,8 +45,19 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.geequery.core.DbClient;
+import com.github.geequery.core.DbUtils;
+import com.github.geequery.core.NativeQuery;
+import com.github.geequery.core.Session;
+import com.github.geequery.dialect.type.ColumnMapping;
+import com.github.geequery.entity.IQueryableEntity;
+import com.github.geequery.entity.MetaHolder;
 import com.github.geequery.springdata.repository.GqRepository;
 import com.github.geequery.springdata.repository.query.QueryUtils;
+import com.github.geequery.tools.ArrayUtils;
+import com.github.geequery.tools.Assert;
+import com.github.geequery.tools.PageLimit;
+import com.querydsl.core.Query;
 import com.querydsl.sql.SQLQuery;
 
 /**

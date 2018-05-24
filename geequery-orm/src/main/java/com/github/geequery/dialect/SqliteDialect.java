@@ -17,18 +17,26 @@ package com.github.geequery.dialect;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.List;
 
 import jef.database.ConnectInfo;
-import jef.database.DbFunction;
-import com.github.geequery.dialect.ColumnType.AutoIncrement;
-import com.github.geequery.dialect.handler.LimitHandler;
-import com.github.geequery.dialect.handler.LimitOffsetLimitHandler;
-import jef.database.exception.ViolatedConstraintNameExtracter;
 import jef.database.meta.DbProperty;
 import jef.database.meta.Feature;
 import jef.database.query.Func;
 import jef.database.query.Scientific;
+
+import org.apache.commons.lang.StringUtils;
+import org.xml.sax.helpers.ParserFactory;
+
+import com.github.geequery.core.support.RDBMS;
+import com.github.geequery.dbmeta.Constraint;
+import com.github.geequery.dbmeta.Function;
+import com.github.geequery.dbmeta.SchemaHandler;
+import com.github.geequery.dbmeta.SequenceInfo;
+import com.github.geequery.dialect.ColumnType.AutoIncrement;
+import com.github.geequery.dialect.extension.ViolatedConstraintNameExtracter;
 import com.github.geequery.dialect.function.CastFunction;
+import com.github.geequery.dialect.function.DbFunction;
 import com.github.geequery.dialect.function.EmuDecodeWithCase;
 import com.github.geequery.dialect.function.EmuJDBCTimestampFunction;
 import com.github.geequery.dialect.function.EmuLRpadOnSqlite;
@@ -38,11 +46,11 @@ import com.github.geequery.dialect.function.StandardSQLFunction;
 import com.github.geequery.dialect.function.TemplateFunction;
 import com.github.geequery.dialect.function.TransformFunction;
 import com.github.geequery.dialect.function.VarArgsSQLFunction;
-import jef.database.support.RDBMS;
-import jef.tools.collection.CollectionUtils;
-
-import org.apache.commons.lang.StringUtils;
-
+import com.github.geequery.dialect.handler.LimitHandler;
+import com.github.geequery.dialect.handler.LimitOffsetLimitHandler;
+import com.github.geequery.dialect.type.ColumnMapping;
+import com.github.geequery.jsqlparser.expression.Interval;
+import com.github.geequery.tools.collection.CollectionUtils;
 import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.SQLiteTemplates;
 
@@ -173,9 +181,11 @@ public class SqliteDialect extends AbstractDialect {
 		registerCompatible(Func.subdate, new TemplateFunction("subdate", "datetime(%1$s,'localtime','-%2$s day')"));
 		registerCompatible(Func.add_months, new TemplateFunction("add_months", "datetime(%1$s,'localtime','%2$s month')"));
 
-		registerCompatible(Func.timestampdiff, new EmuJDBCTimestampFunction(Func.timestampdiff, this));
+		registerCompatible(Func.timestampdiff, new EmuJDBCTimestampFunction(Func.timestampdiff,this));
 		registerCompatible(Func.timestampadd, new EmuJDBCTimestampFunction(Func.timestampadd, this));
-		registerCompatible(Func.trunc, new TemplateFunction("trunc", "cast(%s as integer)"));//FIXME: the minus value -10.5 will be floor to -11.
+		
+		//FIXME: the minus value -10.5 will be floor to -11.
+		registerCompatible(Func.trunc, new TemplateFunction("trunc", "cast(%s as integer)"));
 
 		registerCompatible(Func.lengthb, new TemplateFunction("rpad", "length(hex(%s))/2"));
 		registerCompatible(Func.translate, new EmuTranslateByReplace());
@@ -256,5 +266,77 @@ public class SqliteDialect extends AbstractDialect {
     public SQLTemplates getQueryDslDialect() {
         return queryDslDialect;
     }
+
+	@Override
+	public boolean notHas(com.github.geequery.dialect.Feature feature) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean has(com.github.geequery.dialect.Feature feature) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getColumnNameToUse(ColumnMapping name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<SequenceInfo> getSequenceInfo(SchemaHandler conn, String schema, String seqName) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Constraint> getConstraintInfo(SchemaHandler conn, String schema, String tablename, String constraintName) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void parseDbInfo(com.github.geequery.dbmeta.ConnectInfo connectInfo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getProperty(com.github.geequery.dialect.DbProperty key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getProperty(com.github.geequery.dialect.DbProperty key, String defaultValue) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getPropertyInt(com.github.geequery.dialect.DbProperty key) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public long getPropertyLong(com.github.geequery.dialect.DbProperty key) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void processIntervalExpression(Function func, Interval interval) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void accept(SchemaHandler db) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

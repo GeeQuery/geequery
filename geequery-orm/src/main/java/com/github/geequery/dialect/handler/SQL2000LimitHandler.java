@@ -70,7 +70,8 @@ public class SQL2000LimitHandler implements LimitHandler {
 		//sb.append(") __ef_t");
 		
 		//appendOrderReverse(order,visitor, "__ef_t", selectBody.getSelectList());
-		return new SQLBindings(sb.toString(),Arrays.asList()).setReverseResult(new ResultSetLaterProcess(offsetLimit.getOffset()));
+//		return new SQLBindings(sb.toString(),Arrays.asList()).setReverseResult(new ResultSetLaterProcess(offsetLimit.getOffset()));
+		throw new UnsupportedOperationException();
 	}
 
 	
@@ -94,7 +95,8 @@ public class SQL2000LimitHandler implements LimitHandler {
 		order.accept(visitor);
 //		sb.append(") __ef_tmp2\n");
 //		appendOrderReverse(order,visitor,"__ef_tmp2",null);
-		return new SQLBindings(sb.toString(), Arrays.asList()).setReverseResult(new ResultSetLaterProcess(offsetLimit.getOffset()));
+//		return new SQLBindings(sb.toString(), Arrays.asList()).setReverseResult(new ResultSetLaterProcess(offsetLimit.getOffset()));
+		throw new UnsupportedOperationException();
 	}
 
 	private void appendOrderReverse(SQLOrderBy order, SQLServerOutputVisitor visitor,String tmpTableAlias,List<SQLSelectItem> items) {

@@ -2,11 +2,11 @@ package com.github.geequery.dialect;
 
 import jef.database.ConnectInfo;
 import jef.database.DbFunction;
-import com.github.geequery.dialect.handler.LimitHandler;
 import jef.database.meta.DbProperty;
-import jef.database.support.RDBMS;
-import jef.tools.string.JefStringReader;
+import com.github.geequery.core.support.RDBMS;
 
+import com.github.geequery.dialect.handler.LimitHandler;
+import com.github.geequery.tools.string.JefStringReader;
 import com.querydsl.sql.DB2Templates;
 import com.querydsl.sql.SQLTemplates;
 

@@ -9,7 +9,6 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>geequery-orm</artifactId>
-	<name>geequery-orm</name>
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
@@ -21,9 +20,14 @@
 			<artifactId>javaparser-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-jpa_2.1_spec</artifactId>
-			<version>1.0-alpha-1</version>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<!-- JTA dependencies -->
 		<!-- <dependency> <groupId>com.atomikos</groupId> <artifactId>transactions-jdbc</artifactId> 
@@ -47,48 +51,59 @@
 			<artifactId>postgresql</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-orm</artifactId> 
-			<version>${springframework.version}</version> <scope>provided</scope> </dependency> 
-			<dependency> <groupId>org.springframework</groupId> <artifactId>spring-context</artifactId> 
-			<version>${springframework.version}</version> <scope>provided</scope> </dependency> 
-			<dependency> <groupId>org.springframework</groupId> <artifactId>spring-jdbc</artifactId> 
-			<version>${springframework.version}</version> <scope>provided</scope> </dependency> 
-			<dependency> <groupId>org.springframework</groupId> <artifactId>spring-test</artifactId> 
-			<version>${springframework.version}</version> <scope>provided</scope> </dependency> 
-			<dependency> <groupId>org.aspectj</groupId> <artifactId>aspectjweaver</artifactId> 
-			<version>1.7.3</version> <scope>provided</scope> </dependency> -->
+		<!-- <dependency> <groupId>net.sf.mongojdbcdriver</groupId> <artifactId>mongojdbcdriver</artifactId> 
+			<version>0.0.2</version> <scope>provided</scope> </dependency> -->
+		<!-- Spring dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- 各种连接池的识别 常用的三种第三方连接池 -->
 		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
+			<groupId>com.cloudhopper.proxool</groupId>
+			<artifactId>proxool</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.querydsl</groupId>
-			<artifactId>querydsl-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-sql</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>joda-time</artifactId>
-					<groupId>joda-time</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.querydsl</groupId>
-			<artifactId>querydsl-sql-codegen</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-instrument</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
+
 </project>

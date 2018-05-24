@@ -27,8 +27,9 @@ import org.springframework.data.repository.core.support.AbstractEntityInformatio
 import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 import org.springframework.util.Assert;
 
+import com.github.geequery.entity.IQueryableEntity;
+
 import jef.database.DbUtils;
-import jef.database.IQueryableEntity;
 import jef.database.dialect.type.ColumnMapping;
 import jef.database.jpa.MetaProvider;
 import jef.database.meta.AbstractMetadata;

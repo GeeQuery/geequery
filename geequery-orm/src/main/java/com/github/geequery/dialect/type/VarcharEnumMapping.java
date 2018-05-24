@@ -14,7 +14,7 @@ import jef.database.Field;
 import com.github.geequery.dialect.ColumnType;
 import com.github.geequery.dialect.DatabaseDialect;
 import jef.database.jdbc.result.IResultSet;
-import jef.database.meta.ITableMetadata;
+import jef.database.meta.EntityMetadata;
 import jef.tools.StringUtils;
 
 public class VarcharEnumMapping extends AColumnMapping {
@@ -68,7 +68,7 @@ public class VarcharEnumMapping extends AColumnMapping {
 	}
 
 	@Override
-	public void init(Field field, String columnName, ColumnType type, ITableMetadata meta) {
+	public void init(Field field, String columnName, ColumnType type, EntityMetadata meta) {
 		super.init(field, columnName, type, meta);
 		BeanAccessor ba = meta.getContainerAccessor();
 		Map<Class<?>,Annotation> map=ba.getAnnotationOnField(field.name());

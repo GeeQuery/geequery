@@ -29,7 +29,7 @@ import jef.database.meta.FunctionMapping;
 import jef.database.meta.object.Column;
 import jef.database.meta.object.Constraint;
 import jef.database.meta.object.SequenceInfo;
-import jef.database.support.RDBMS;
+import com.github.geequery.core.support.RDBMS;
 import jef.database.wrapper.clause.InsertSqlClause;
 
 import com.querydsl.sql.SQLTemplates;

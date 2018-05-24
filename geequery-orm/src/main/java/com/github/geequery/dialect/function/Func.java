@@ -223,14 +223,14 @@ public enum Func implements DbFunction{
 	 */
 	datediff,
 	/**
-	 * 时间差多少，单位需要指定，第一个参数为单位取值范围是{@link jef.database.support.SQL_TSI}的枚举，后两个参数是日期1和日期2，返回日期2减去日期1（注意和datediff刚好相反）
+	 * 时间差多少，单位需要指定，第一个参数为单位取值范围是{@link com.github.geequery.core.support.SQL_TSI}的枚举，后两个参数是日期1和日期2，返回日期2减去日期1（注意和datediff刚好相反）
 	 * (JDBC标准函数)
 	 */
 	timestampdiff,
 	/**
 	 * 时间调整
 	 * <ul>
-	 * <li>第一个参数是时间调整单位。参见{@link jef.database.support.SQL_TSI}
+	 * <li>第一个参数是时间调整单位。参见{@link com.github.geequery.core.support.SQL_TSI}
 	 * (MYSQL原生实现了timestampadd,timestampdiff两个函数，并且允许时间单位简写，但如果你写作 SQL_TSI_DAY MYSQL也能识别。)</li>
 	 * <li>第二个参数是整形表达式，表示调整的数值（正数+，负数-）</li>
 	 * <li>第三个参数是时间timestamp表达式</li>

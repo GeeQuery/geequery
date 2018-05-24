@@ -10,6 +10,7 @@ import com.github.geequery.annotation.DateGenerateType;
 import com.github.geequery.dialect.ColumnType;
 import com.github.geequery.dialect.DatabaseDialect;
 import com.github.geequery.dialect.function.Func;
+import com.github.geequery.entity.EntityMetadata;
 import com.github.geequery.jsqlparser.expression.SqlExpression;
 import com.github.geequery.tools.reflect.Property;
 import com.querydsl.core.dml.UpdateClause;
@@ -21,7 +22,7 @@ abstract class AbstractTimeMapping extends AColumnMapping implements VersionSupp
 	private Property accessor;
 
 	@Override
-	public void init(Path<T> field, String columnName, ColumnType type, ITableMetadata meta) {
+	public void init(Path<T> field, String columnName, ColumnType type, EntityMetadata meta) {
 		super.init(field, columnName, type, meta);
 		if (type instanceof ColumnType.TimeStamp) {
 			ColumnType.TimeStamp cType = (ColumnType.TimeStamp) type;

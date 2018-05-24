@@ -1,4 +1,4 @@
-GeeQuery v2使用手册
+# GeeQuery v2 user guide
 
 [TOC]
 
@@ -34,9 +34,44 @@ pom.xml
 
 # 3. Supported JPA Features
 
-# 4. 
+# 4. Supported QueryDSL Features 
 
 
 
 2. Tutorials
 
+
+
+
+
+
+# Anniox Roadmap
+
+Roadmap of EF 2
+
+
+
+* About Data sharding 
+* Condition Creatria Stynx
+* QueryDSL Intergation
+* POJO
+* No Pooling
+* Move package to com.github
+* Query-DSL with SQL/JPA
+* Single DataSource. One session factory . one datasource.
+* how to switch datasoruce and lookup bwtween multiple tables. 
+
+
+
+要不要向JPA EntityManager的API走一次
+
+* QueryDSL API —— JPA（高）
+* QueryDSL API —— SQL （高，是采用原生还是增加解析兼容处理待定）
+* QueryDSL API —— JPASQL(？)
+* Spring-Data API(高)
+* Spring-Data的 QueryDslPredicateExecutor(高)
+* Spring-Data的 JpaSpecificationExecutor(？)
+* 事务管理方案选择
+  * JPA Transaction
+  * DataSource Transaction (ok)
+  * 编写专门的事务管理器

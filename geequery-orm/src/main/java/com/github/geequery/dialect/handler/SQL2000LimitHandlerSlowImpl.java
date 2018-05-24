@@ -66,7 +66,8 @@ public class SQL2000LimitHandlerSlowImpl implements LimitHandler {
 		order.appendTo(sb);
 //		sb.append(") __ef_tmp2\n");
 //		order.reverseAppendTo(sb,"__ef_tmp2",null);
-		return new BindSql(sb.toString()).setReverseResult(new ResultSetLaterProcess(offsetLimit.getOffset()));
+//		return new BindSql(sb.toString()).setReverseResult(new ResultSetLaterProcess(offsetLimit.getOffset()));
+		throw new UnsupportedOperationException();
 	}
 
 	private SQLBindings toPage(PageLimit offsetLimit, PlainSelect selectBody,String raw) {
@@ -81,7 +82,8 @@ public class SQL2000LimitHandlerSlowImpl implements LimitHandler {
 		selectBody.appendTo(sb);
 //		sb.append(") __ef_t");
 //		order.reverseAppendTo(sb,"__ef_t",selectBody.getSelectItems());
-		return new SQLBindings(sb.toString(), Arrays.asList()).setReverseResult(new ResultSetLaterProcess(offsetLimit.getOffset()));
+		//return new SQLBindings(sb.toString(), Arrays.asList()).setReverseResult(new ResultSetLaterProcess(offsetLimit.getOffset()));
+		throw new UnsupportedOperationException();
 	}
 
 

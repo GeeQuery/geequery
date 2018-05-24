@@ -10,21 +10,19 @@ import java.util.function.Predicate;
 
 import javax.persistence.Column;
 
-import jef.accelerator.bean.BeanAccessor;
-import jef.database.DbUtils;
-import jef.database.Field;
-import jef.database.IQueryableEntity;
-import jef.database.annotation.UnsavedValue;
+import com.github.geequery.Field;
+import com.github.geequery.accelerator.bean.BeanAccessor;
+import com.github.geequery.annotation.UnsavedValue;
+import com.github.geequery.core.DbUtils;
 import com.github.geequery.dialect.ColumnType;
 import com.github.geequery.dialect.DatabaseDialect;
-import jef.database.jsqlparser.visitor.Expression;
-import jef.database.meta.ITableMetadata;
-import jef.database.wrapper.clause.InsertSqlClause;
-import jef.tools.Assert;
-import jef.tools.DateUtils;
-import jef.tools.StringUtils;
-import jef.tools.reflect.ConvertUtils;
-import jef.tools.reflect.Property;
+import com.github.geequery.entity.EntityMetadata;
+import com.github.geequery.jsqlparser.visitor.Expression;
+import com.github.geequery.tools.Assert;
+import com.github.geequery.tools.DateUtils;
+import com.github.geequery.tools.StringUtils;
+import com.github.geequery.tools.reflect.ConvertUtils;
+import com.github.geequery.tools.reflect.Property;
 
 public abstract class AColumnMapping implements ColumnMapping {
 	/**
@@ -35,7 +33,7 @@ public abstract class AColumnMapping implements ColumnMapping {
 	private transient String lowerColumnName;
 	private transient String upperColumnName;
 
-	protected ITableMetadata meta;
+	protected EntityMetadata meta;
 	private String fieldName;
 	protected Field field;
 	protected ColumnType columnDef;
@@ -120,9 +118,9 @@ public abstract class AColumnMapping implements ColumnMapping {
 		}
 	};
 
-	public void init(Field field, String columnName, ColumnType type, ITableMetadata meta) {
+	public void init(Field field, String columnName, ColumnType type, EntityMetadata meta) {
 		this.field = field;
-		this.fieldName = field.name();
+		this.fieldName = field.toString();
 		this.rawColumnName = columnName;
 		this.lowerColumnName = columnName.toLowerCase();
 		this.upperColumnName = columnName.toUpperCase();
@@ -131,13 +129,13 @@ public abstract class AColumnMapping implements ColumnMapping {
 
 		BeanAccessor ba = meta.getContainerAccessor();
 
-		fieldAccessor = ba.getProperty(field.name());
+		fieldAccessor = ba.getProperty(field.toString());
 		Assert.notNull(fieldAccessor, ba.toString() + field.toString());
 		Class<?> containerType = fieldAccessor.getType();
 		if (clz.isAssignableFrom(containerType)) {
 			this.clz = containerType;
 		}
-		Map<Class<?>, Annotation> map = ba.getAnnotationOnField(field.name());
+		Map<Class<?>, Annotation> map = ba.getAnnotationOnField(field.toString());
 		UnsavedValue unsaveValue = map == null ? null : (UnsavedValue) map.get(UnsavedValue.class);
 		if (unsaveValue != null) {
 			unsavedValueDeclared = true;
@@ -237,7 +235,7 @@ public abstract class AColumnMapping implements ColumnMapping {
 		return field;
 	}
 
-	public ITableMetadata getMeta() {
+	public EntityMetadata getMeta() {
 		return meta;
 	}
 
@@ -308,7 +306,7 @@ public abstract class AColumnMapping implements ColumnMapping {
 	 */
 	protected abstract String getSqlExpression(Object value, DatabaseDialect profile);
 
-	public void processPreparedInsert(IQueryableEntity obj, List<String> cStr, List<String> vStr,
+	public void processPreparedInsert(Object obj, List<String> cStr, List<String> vStr,
 			InsertSqlClause result, boolean dynamic) throws SQLException {
 		if (dynamic && !obj.isUsed(field)) {
 			return;
